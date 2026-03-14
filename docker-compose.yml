@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: user_products_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: user_products_db
+    ports:
+       - '5433:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Ejecuta el script de creación al iniciar por primera vez
+      - ./src/database/migrations/001_initial_schema.sql:/docker-entrypoint-initdb.d/001_initial_schema.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Servidor de emails para desarrollo (atrapa todos los emails sin enviarlos)
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog
+    ports:
+      - '1025:1025' # SMTP
+      - '8025:8025' # UI web para ver los emails
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
