@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
 import { Product } from './products/entities/product.entity';
+import { UsersModule } from './users/users.module'; 
 import { PasswordResetToken } from './auth/entities/password-reset-token.entity';
 @Module({
   imports: [
@@ -22,12 +23,13 @@ import { PasswordResetToken } from './auth/entities/password-reset-token.entity'
         port: config.get<number>('DB_PORT', 5432),
         username: config.get<string>('DB_USERNAME', 'postgres'),
         password: config.get<string>('DB_PASSWORD', ''),
-        database: config.get<string>('DB_NAME', 'nestjs_products_db'),
+        database: config.get<string>('DB_NAME', 'user_products_db'),
         entities: [User, Product, PasswordResetToken],      
         synchronize: true,
         logging: config.get<string>('NODE_ENV') === 'development',
       }),
     }),
+     UsersModule,  
   ],
 })
 export class AppModule {}
