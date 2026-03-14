@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
+import { User } from './users/entities/user.entity';
+import { Product } from './products/entities/product.entity';
+import { PasswordResetToken } from './auth/entities/password-reset-token.entity';
 @Module({
   imports: [
     // Hace disponibles las variables de .env en toda la app
@@ -21,7 +23,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: config.get<string>('DB_USERNAME', 'postgres'),
         password: config.get<string>('DB_PASSWORD', ''),
         database: config.get<string>('DB_NAME', 'nestjs_products_db'),
-        entities: [],      
+        entities: [User, Product, PasswordResetToken],      
         synchronize: true,
         logging: config.get<string>('NODE_ENV') === 'development',
       }),
