@@ -10,13 +10,11 @@ export class MailService {
 
   constructor(private readonly configService: ConfigService) {
     this.transporter = nodemailer.createTransport({
-      host: this.configService.get<string>('MAIL_HOST'),
-      port: this.configService.get<number>('MAIL_PORT'),
-      auth: {
-        user: this.configService.get<string>('MAIL_USER'),
-        pass: this.configService.get<string>('MAIL_PASS'),
-      },
-    });
+      host: this.configService.get<string>('MAIL_HOST') as string,
+      port: this.configService.get<number>('MAIL_PORT') as number,
+      secure: false,
+      ignoreTLS: true,
+    } as nodemailer.TransportOptions);
   }
 
   /**
@@ -69,7 +67,6 @@ export class MailService {
       this.logger.log(`Email de recuperación enviado a: ${user.email}`);
     } catch (error) {
       this.logger.error(`Error al enviar email a ${user.email}:`, error);
-      // No lanzamos el error al cliente para no revelar información
     }
   }
 }

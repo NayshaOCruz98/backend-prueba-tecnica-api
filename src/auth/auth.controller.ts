@@ -7,14 +7,16 @@ import {
   ApiTags, ApiOperation, ApiResponse, ApiBody,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { RegisterDto, LoginDto } from './dto/auth.dto';
+import {
+  RegisterDto, LoginDto,
+  ForgotPasswordDto, ResetPasswordDto,
+} from './dto/auth.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // POST /api/v1/auth/register
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Registrar nuevo usuario' })
@@ -24,8 +26,6 @@ export class AuthController {
     return this.authService.register(dto);
   }
 
-  // POST /api/v1/auth/login
-  // LocalGuard valida email/password antes de llegar al método
   @Post('login')
   @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
@@ -34,7 +34,30 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Login exitoso — retorna JWT' })
   @ApiResponse({ status: 401, description: 'Credenciales incorrectas' })
   login(@Request() req: any) {
-    // req.user es seteado por LocalStrategy tras validar
     return this.authService.login(req.user);
+  }
+
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Solicitar recuperación de contraseña por email' })
+  @ApiResponse({
+    status: 200,
+    description: 'Si el email existe recibirás las instrucciones — siempre retorna el mismo mensaje por seguridad',
+  })
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    await this.authService.forgotPassword(dto);
+    return {
+      message: 'Si el email existe en nuestro sistema, recibirás las instrucciones de recuperación.',
+    };
+  }
+
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Resetear contraseña usando el token del email' })
+  @ApiResponse({ status: 200, description: 'Contraseña actualizada correctamente' })
+  @ApiResponse({ status: 400, description: 'Token inválido o expirado' })
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    await this.authService.resetPassword(dto);
+    return { message: 'Contraseña actualizada exitosamente.' };
   }
 }
