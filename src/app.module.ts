@@ -6,6 +6,7 @@ import { Product } from './products/entities/product.entity';
 import { UsersModule } from './users/users.module'; 
 import { PasswordResetToken } from './auth/entities/password-reset-token.entity';
 import { AuthModule } from './auth/auth.module';
+import { ProductsModule } from './products/products.module';
 @Module({
   imports: [
     // Hace disponibles las variables de .env en toda la app
@@ -31,7 +32,8 @@ import { AuthModule } from './auth/auth.module';
       }),
     }),
      UsersModule,  
-     AuthModule
+     AuthModule,
+     ProductsModule,
   ],
 })
 export class AppModule {}
