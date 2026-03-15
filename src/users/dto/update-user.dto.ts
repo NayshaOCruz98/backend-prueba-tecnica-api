@@ -1,23 +1,22 @@
-import {
-  IsString,
-  IsOptional,
-  MaxLength,
-  IsEnum,
-} from 'class-validator';
+import { IsString, IsOptional, MaxLength, IsEnum } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { UserRole } from '../entities/user.entity';
 
 export class UpdateUserDto {
+  @ApiPropertyOptional({ example: 'Naysha', description: 'Nombre del usuario' })
   @IsOptional()
-  @IsString({ message: 'El nombre debe ser texto' })
+  @IsString()
   @MaxLength(100)
   firstName?: string;
 
+  @ApiPropertyOptional({ example: 'Cruz', description: 'Apellido del usuario' })
   @IsOptional()
-  @IsString({ message: 'El apellido debe ser texto' })
+  @IsString()
   @MaxLength(100)
   lastName?: string;
 
+  @ApiPropertyOptional({ enum: UserRole, description: 'Solo admins pueden cambiar el rol' })
   @IsOptional()
-  @IsEnum(UserRole, { message: 'Rol inválido. Debe ser admin o user' })
+  @IsEnum(UserRole)
   role?: UserRole;
 }
