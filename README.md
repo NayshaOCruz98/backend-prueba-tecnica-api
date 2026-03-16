@@ -1,98 +1,187 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# backend-prueba-tecnica-api
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Requisitos
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- Node.js >= 18
+- npm >= 9
+- PostgreSQL >= 14 **o** Docker
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
+## Instalación
 ```bash
-$ npm install
+git clone https://github.com/NayshaOCruz98/backend-prueba-tecnica-api.git
+cd backend-prueba-tecnica-api
+npm install
 ```
 
-## Compile and run the project
-
+Copia el archivo de variables de entorno y edítalo con tus credenciales:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cp .env.example .env
 ```
 
-## Run tests
+## Base de datos — el proyecto se puede probar de dos formas
 
+### Opción A — Docker (recomendado)
+
+No requiere tener PostgreSQL instalado.
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+docker-compose up -d
 ```
 
-## Deployment
+Esto levanta:
+- **PostgreSQL** en el puerto `5432` — base de datos `user_products_db`
+- **MailHog** en el puerto `1025` (SMTP) y `8025` (UI de emails)
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+> ⚠️ Si ya tienes PostgreSQL corriendo localmente en el puerto `5432`,
+> cambia el puerto en `docker-compose.yml`:
+> ```yaml
+> ports:
+>   - '5433:5432'
+> ```
+> Y en `.env` actualiza:
+> ```dotenv
+> DB_PORT=5433
+> ```
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+### Opción B — PostgreSQL local (sin Docker)
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+psql -U postgres -c "CREATE DATABASE user_products_db;"
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Edita el `.env` con tus credenciales:
+```dotenv
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=tu_password_local
+DB_NAME=user_products_db
+```
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## Iniciar el servidor
+```bash
+npm run start:dev
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+| Servicio | URL |
+|---|---|
+| API | http://localhost:3000/api/v1 |
+| Swagger | http://localhost:3000/docs |
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Cómo probar el proyecto
 
-## Stay in touch
+### Opción A — Swagger (sin levantar frontend)
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Disponible en http://localhost:3000/docs una vez levantado el servidor.
+No requiere instalar nada adicional.
 
-## License
+1. Registrar usuario con `POST /auth/register`
+2. Copiar el `accessToken` de la respuesta
+3. Click en **Authorize** (candado arriba a la derecha)
+4. Pegar el token en el campo **Value** — solo el token, sin la palabra "Bearer"
+5. Click en **Authorize** → **Close**
+6. Probar todos los endpoints desde el navegador
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+> ℹ️ El token expira en 24h. Si los endpoints retornan 401,
+> vuelve a hacer login y actualiza el token en Authorize.
+
+### Opción B — Frontend
+
+Repositorio: https://github.com/NayshaOCruz98/frontend-prueba-tecnica
+
+Levantar el frontend y abrir http://localhost:5173.
+Ver instrucciones en el README del repositorio.
+
+---
+
+## Recuperación de contraseña — elige una opción
+
+### Opción A — MailHog con Docker (recomendado)
+
+Si levantaste con `docker-compose up -d`, MailHog ya está corriendo.
+El `.env.example` ya tiene esta configuración lista:
+```dotenv
+MAIL_HOST=localhost
+MAIL_PORT=1025
+MAIL_USER=
+MAIL_PASS=
+```
+
+Ver emails recibidos en: **http://localhost:8025**
+
+El link del email apunta a `http://localhost:5173/reset-password?token=...`
+
+
+### Opción B — Sin configurar email
+
+Llamar primero `POST /auth/forgot-password` con el email del usuario,
+luego obtener el token directamente de la base de datos:
+
+**Con Docker:**
+```bash
+docker exec -it user_products_db psql -U postgres -d user_products_db \
+-c "SELECT token, expires_at FROM password_reset_tokens ORDER BY created_at DESC LIMIT 1;"
+```
+
+**Con PostgreSQL local:**
+```bash
+psql -U postgres -d user_products_db \
+-c "SELECT token, expires_at FROM password_reset_tokens ORDER BY created_at DESC LIMIT 1;"
+```
+
+- **Con frontend levantado** — navega manualmente a:
+```
+  http://localhost:5173/reset-password?token=PEGA_EL_TOKEN_AQUI
+```
+- **Sin frontend** — usa el token directamente en `POST /api/v1/auth/reset-password` desde Swagger.
+
+## Crear usuario admin
+
+Por defecto todos los usuarios se registran con `role: user`.
+Para probar los endpoints que requieren rol admin:
+
+**Con Docker:**
+```bash
+docker exec -it user_products_db psql -U postgres -d user_products_db \
+-c "UPDATE users SET role = 'admin' WHERE email = 'tu@email.com';"
+```
+
+**Con PostgreSQL local:**
+```bash
+psql -U postgres -d user_products_db \
+-c "UPDATE users SET role = 'admin' WHERE email = 'tu@email.com';"
+```
+
+> ⚠️ Después de cambiar el rol debes volver a hacer login para obtener
+> un nuevo JWT con `role: admin`.
+
+---
+
+## Tests
+```bash
+npm run test        # correr todos los tests
+npm run test:cov    # ver cobertura de código
+```
+
+---
+
+## Lo que permite el sistema
+
+- Registro con contraseña segura (mínimo 8 caracteres, mayúscula + minúscula + número)
+- Login con JWT — expira en 24h
+- Recuperar contraseña por email — token de un solo uso, expira en 1h
+- CRUD de productos con paginación, búsqueda y filtros por categoría
+- Admin ve y gestiona todos los productos y usuarios
+- Usuario normal solo ve y gestiona lo suyo
+
+## Lo que no permite
+
+- Reutilizar la misma contraseña al hacer reset
+- Usar un token de recuperación más de una vez
+- Usar un token expirado (más de 1 hora)
+- Un usuario normal ver datos de otros usuarios
+- Autopromovarse a rol admin
