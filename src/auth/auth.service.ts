@@ -106,7 +106,17 @@ export class AuthService {
     if (tokenRecord.expiresAt < new Date()) {
       throw new BadRequestException('El token ha expirado');
     }
+    const user = await this.usersService.findById(tokenRecord.userId);
+    if (!user) {
+      throw new BadRequestException('Usuario no encontrado');
+    }
 
+    const isSamePassword = await bcrypt.compare(dto.newPassword, user.password);
+    if (isSamePassword) {
+      throw new BadRequestException(
+        'La nueva contraseña no puede ser una que hayas usado antes',
+      );
+    }
     // Actualizar la contraseña
     const hashedPassword = await bcrypt.hash(dto.newPassword, SALT_ROUNDS);
     await this.usersService.updatePassword(tokenRecord.userId, hashedPassword);

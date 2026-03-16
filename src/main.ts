@@ -36,7 +36,7 @@ async function bootstrap() {
 
   // ── Swagger ──────────────────────────────────────────────
   const config = new DocumentBuilder()
-    .setTitle('Prubea tecnica Backend')
+    .setTitle('Prueba tecnica-Backend')
     .setDescription(
       'API REST para gestión de usuarios y productos. ' +
       'Usa el botón Authorize para ingresar tu JWT y probar los endpoints protegidos.',

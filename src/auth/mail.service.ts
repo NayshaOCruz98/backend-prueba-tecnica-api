@@ -28,7 +28,7 @@ export class MailService {
     const resetLink = `${frontendUrl}/reset-password?token=${token}`;
 
     const mailOptions: nodemailer.SendMailOptions = {
-      from: `"User Products App" <${this.configService.get('MAIL_FROM')}>`,
+      from: `"User-Prueba tecnica" <${this.configService.get('MAIL_FROM')}>`,
       to: user.email,
       subject: 'Recuperación de contraseña',
       html: `
